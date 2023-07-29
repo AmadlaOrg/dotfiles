@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+# Check if a file was provided
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 file"
+    exit 1
+fi
+
+file=$1
+file_type=$(file -b --mime-type $file)
+
+# Function to decompress based on file extension
+decompress_based_on_extension() {
+    case $file in
+        *.tar.bz2) tar xvjf $file ;;
+        *.tar.gz) tar xvzf $file ;;
+        *.tar.xz) tar xvJf $file ;;
+        *.lzma) unlzma $file ;;
+        *.bz2) bunzip2 $file ;;
+        *.rar) unrar x $file ;;
+        *.gz) gunzip $file ;;
+        *.tar) tar xvf $file ;;
+        *.tbz2) tar xvjf $file ;;
+        *.tgz) tar xvzf $file ;;
+        *.zip) unzip $file ;;
+        *.Z) uncompress $file ;;
+        *.7z) 7z x $file ;;
+        *.xz) unxz $file ;;
+        *.lzo) lzop -d $file ;;
+        *.zst) unzstd $file ;;
+        *) echo "'$file' cannot be decompressed with this script." ;;
+    esac
+}
+
+# Check the file type to determine the type of compression
+case $file_type in
+    application/x-bzip2) bunzip2 $file ;;
+    application/gzip) gunzip $file ;;
+    application/x-xz) unxz $file ;;
+    application/x-lzip) lunzip $file ;;
+    application/x-lzma) unlzma $file ;;
+    application/x-rar) unrar x $file ;;
+    application/zip) unzip $file ;;
+    application/x-tar) tar xvf $file ;;
+    application/x-7z-compressed) 7z x $file ;;
+    application/zstd) unzstd $file ;;
+    *) decompress_based_on_extension ;;
+esac
