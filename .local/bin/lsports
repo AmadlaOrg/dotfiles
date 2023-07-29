@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# Function to check if a command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+# Function to list used ports with a command
+list_ports() {
+    case $1 in
+        netstat) netstat -tuln ;;
+        ss) ss -tuln ;;
+        lsof) sudo lsof -i -P -n ;;
+    esac
+}
+
+# Check commands and list ports
+if command_exists netstat; then
+    list_ports netstat
+elif command_exists ss; then
+    list_ports ss
+elif command_exists lsof; then
+    list_ports lsof
+else
+    echo "None of the commands (netstat, ss, lsof) are available on this system."
+    exit 1
+fi
+

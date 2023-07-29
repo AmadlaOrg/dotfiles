@@ -3,6 +3,8 @@
 # List only directories
 # shellcheck disable=SC2139
 alias \
+	ll="ls -la" \
+	la="ls -a" \
 	lsd="ls -lhF ${colorflag} | grep --color=never '^d'"
 
 alias \
@@ -18,6 +20,8 @@ alias \
 alias \
 	dwln="cd ~/Downloads" \
 	docs="cd ~/Documents" \
+	etc="cd /etc" \
+	home="cd ~"
 
 # Stopwatch
 alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date'
@@ -47,5 +51,3 @@ alias map="xargs -n1"
 
 # Edit hosts
 alias hosts='sudo vim /etc/hosts'
-
-
