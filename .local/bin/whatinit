@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+if grep -qEi "(Microsoft|WSL)" /proc/version &> /dev/null ; then
+    echo "WSL"
+elif pidof systemd &> /dev/null; then
+    echo "Systemd"
+elif [[ -x /sbin/init && $(/sbin/init --version 2>/dev/null) =~ upstart ]]; then
+    echo "Upstart"
+elif [[ -x /sbin/init && $(/sbin/init --version 2>/dev/null) =~ sysvinit ]]; then
+    echo "SysV"
+elif [[ -x /sbin/init && $(/sbin/init --version 2>/dev/null) =~ openrc ]]; then
+    echo "OpenRC"
+elif [[ -x /sbin/runit-init ]]; then
+    echo "runit"
+elif [[ -x /sbin/s6-svscan ]]; then
+    echo "s6"
+elif [[ -x /sbin/epoch ]]; then
+    echo "Epoch"
+else
+    echo "Unable to determine init system"
+fi

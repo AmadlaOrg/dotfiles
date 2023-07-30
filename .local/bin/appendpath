@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# Check that the right number of arguments are provided
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 path_to_add"
+    exit 1
+fi
+
+# Get the directory path from the command-line argument
+path_to_add=$1
+
+# Append the new path to the PATH variable
+export PATH=$PATH:$path_to_add
+
+# Echo the new PATH
+echo "export PATH=\$PATH:$path_to_add"
