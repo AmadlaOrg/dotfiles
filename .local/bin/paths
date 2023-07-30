@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+IFS=':' read -ra PATHS <<< "$PATH"
+
+for path in "${PATHS[@]}"; do
+    if [[ -d "$path" ]]; then
+        echo -e "\e[32m$path \e[39m"    # Green for existing directories
+    else
+        echo -e "\e[31m$path - NOT FOUND\e[39m"    # Red for non-existing directories
+    fi
+done
