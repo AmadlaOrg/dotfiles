@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+#!/bin/bash
+
+# Define the required values
+required_fds=65536
+required_swappiness=1
+required_somaxconn=1024
+required_syncookies=0
+
+# Check file-max
+if [ -f /proc/sys/fs/file-max ]; then
+    current_fds=$(cat /proc/sys/fs/file-max)
+    if [ "$current_fds" -ge "$required_fds" ]
+    then
+        echo "The system-wide limit on file descriptors is sufficient ($current_fds)"
+    else
+        echo "Warning: The system-wide limit on file descriptors is less than $required_fds ($current_fds)"
+    fi
+else
+    echo "Warning: /proc/sys/fs/file-max not found"
+fi
+
+# Check vm.swappiness
+if [ -f /proc/sys/vm/swappiness ]; then
+    current_swappiness=$(cat /proc/sys/vm/swappiness)
+    if [ "$current_swappiness" -le "$required_swappiness" ]
+    then
+        echo "The vm.swappiness value is acceptable ($current_swappiness)"
+    else
+        echo "Warning: The vm.swappiness value is greater than $required_swappiness ($current_swappiness)"
+    fi
+else
+    echo "Warning: /proc/sys/vm/swappiness not found"
+fi
+
+# Check net.core.somaxconn
+if [ -f /proc/sys/net/core/somaxconn ]; then
+    current_somaxconn=$(cat /proc/sys/net/core/somaxconn)
+    if [ "$current_somaxconn" -ge "$required_somaxconn" ]
+    then
+        echo "The net.core.somaxconn value is sufficient ($current_somaxconn)"
+    else
+        echo "Warning: The net.core.somaxconn value is less than $required_somaxconn ($current_somaxconn)"
+    fi
+else
+    echo "Warning: /proc/sys/net/core/somaxconn not found"
+fi
+
+# Check net.ipv4.tcp_syncookies
+if [ -f /proc/sys/net/ipv4/tcp_syncookies ]; then
+    current_syncookies=$(cat /proc/sys/net/ipv4/tcp_syncookies)
+    if [ "$current_syncookies" -eq "$required_syncookies" ]
+    then
+        echo "The net.ipv4.tcp_syncookies setting is correct ($current_syncookies)"
+    else
+        echo "Warning: The net.ipv4.tcp_syncookies setting is not $required_syncookies ($current_syncookies)"
+    fi
+else
+    echo "Warning: /proc/sys/net/ipv4/tcp_syncookies not found"
+fi

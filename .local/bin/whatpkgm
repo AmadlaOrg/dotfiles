@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# Array of package managers to check
+pkg_managers=("apt" "yum" "dnf" "zypper" "pacman" "emerge" "aptitude" "snap" "flatpak" "apk")
+
+# Define color codes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
+for pkg_manager in "${pkg_managers[@]}"
+do
+    if command -v $pkg_manager &> /dev/null
+    then
+        echo -e "${pkg_manager} ${GREEN}is installed.${NC}"
+    else
+        echo -e "${pkg_manager} ${RED}is not installed.${NC}"
+    fi
+done
