@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# Find all commands in the PATH that start with 'what'
+command_names=($(compgen -ac | grep '^what'))
+
+# Associative array to hold the command outputs
+declare -A command_outputs
+
+# Loop over the command names, run each command and store the output
+for cmd in "${command_names[@]}"; do
+    # Strip the 'what' prefix from the command name for display
+    name=${cmd#what}
+    # Run the command and store the output
+    command_outputs[$name]=$(eval "$cmd" 2>/dev/null)
+done
+
+# Now we can print out the results in a table
+printf '%-20s | %-20s\n' "Command" "Output"
+printf '%-20s | %-20s\n' "-------" "------"
+for name in "${!command_outputs[@]}"; do
+    printf '%-20s | %-20s\n' "$name" "${command_outputs[$name]}"
+done
